@@ -1,0 +1,50 @@
+[
+  {
+    "token": "interview-f981a1a1-6878-4a95-8e1d-26a49dd70b06",
+    "interviewer": "Vinayak",
+    "slots": [
+      {
+        "date": "2025-08-01",
+        "startTime": "15:00",
+        "endTime": "16:00"
+      }
+    ],
+    "submittedAt": "2025-07-29T10:04:40.585Z"
+  },
+  {
+    "token": "interview-929ebdf1-04bc-4b91-8864-2fb7fd2e9d6e",
+    "interviewer": "VInayak",
+    "slots": [
+      {
+        "date": "2025-08-02",
+        "startTime": "13:00",
+        "endTime": "14:00"
+      }
+    ],
+    "submittedAt": "2025-07-29T10:20:13.682Z"
+  },
+  {
+    "token": "interview-39fd2e91-517c-44c6-82ab-347d0d7c976a",
+    "interviewer": "Vinayak",
+    "slots": [
+      {
+        "date": "2025-08-03",
+        "startTime": "15:00",
+        "endTime": "16:00"
+      }
+    ],
+    "submittedAt": "2025-07-29T17:46:55.211Z"
+  },
+  {
+    "token": "interview-4195f5ca-d14b-40e9-b551-53110db2883c",
+    "interviewer": "Vinayak Tiwari",
+    "slots": [
+      {
+        "date": "2025-08-03",
+        "startTime": "15:00",
+        "endTime": "16:00"
+      }
+    ],
+    "submittedAt": "2025-07-29T18:08:02.515Z"
+  }
+]
