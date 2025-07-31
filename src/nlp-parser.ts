@@ -1,28 +1,3 @@
-// import fetch from 'node-fetch';
-// import axios from 'axios';
-// import dotenv from 'dotenv';
-// dotenv.config();
-
-// Hugging Face code commented out
-// const HF_API_KEY = process.env.HF_API_KEY;
-// console.log('DEBUG: HF_API_KEY loaded?', !!HF_API_KEY);
-
-// Helper to parse JSON response safely
-// function safeParseTimeSlot(json: string): any | null {
-//   try {
-//     const obj = JSON.parse(json);
-//     if (obj.date && obj.start_time && obj.end_time) {
-//       return {
-//         date: obj.date,
-//         start_time: obj.start_time,
-//         end_time: obj.end_time
-//       };
-//     }
-//     return null;
-//   } catch {
-//     return null;
-//   }
-// }
 
 function addContextIfAmbiguous(input: string): string {
   const dayPattern = /^\s*(\d{1,2})(st|nd|rd|th)?\s*$/i;
@@ -49,7 +24,7 @@ function addVeryWellFormedContext(input: string, context: any): string {
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const currentDay = days[istNow.getDay()];
 
-  // Scheduled interview details (editable)
+
   const scheduledDate = context?.scheduledDate || '2025-07-18';
   const scheduledStartTime = context?.scheduledStartTime || '14:00';
   const scheduledEndTime = context?.scheduledEndTime || '15:00';
@@ -75,86 +50,6 @@ A rescheduling request has been made: "${input}"
 
 Extract the new date and time for the interview from the request above. Respond ONLY in JSON in the following format: { "date": "YYYY-MM-DD", "start_time": "HH:MM", "end_time": "HH:MM" } (all in IST).`;
 }
-
-// Helper to extract ISO date(s) and time(s) from input
-// function extractDateTimeFromInput(input: string): any | null {
-//   const isoDatePattern = /\b(\d{4}-\d{2}-\d{2})\b/g;
-//   const matches = [...input.matchAll(isoDatePattern)];
-//   let date: string | undefined;
-//   if (matches.length >= 1) {
-//     date = matches[0][1];
-//   }
-
-//   // More robust: allow optional words before the time range
-//   const timeRangePattern = /(?:\b\w+\b\s*){0,3}?(\d{1,2})(?::(\d{2}))?\s*(AM|PM|am|pm)?\s*(?:-|to|–)\s*(\d{1,2})(?::(\d{2}))?\s*(AM|PM|am|pm)?(?:\s*in\s*\w+)?/i;
-//   const timeRangeMatch = input.match(timeRangePattern);
-
-//   let start_time = '09:00';
-//   let end_time = '10:00';
-
-//   if (timeRangeMatch) {
-//     console.log('DEBUG: Matched time range:', timeRangeMatch);
-//     // Parse start time
-//     let startHour = parseInt(timeRangeMatch[1], 10);
-//     let startMinute = timeRangeMatch[2] ? parseInt(timeRangeMatch[2], 10) : 0;
-//     let startAMPM = timeRangeMatch[3]?.toLowerCase();
-//     // Parse end time
-//     let endHour = parseInt(timeRangeMatch[4], 10);
-//     let endMinute = timeRangeMatch[5] ? parseInt(timeRangeMatch[5], 10) : 0;
-//     let endAMPM = timeRangeMatch[6]?.toLowerCase();
-
-//     // Handle AM/PM for start
-//     if (startAMPM === 'pm' && startHour < 12) startHour += 12;
-//     if (startAMPM === 'am' && startHour === 12) startHour = 0;
-//     // Handle AM/PM for end
-//     if (endAMPM === 'pm' && endHour < 12) endHour += 12;
-//     if (endAMPM === 'am' && endHour === 12) endHour = 0;
-
-//     start_time = `${startHour.toString().padStart(2, '0')}:${startMinute.toString().padStart(2, '0')}`;
-//     end_time = `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
-//   } else {
-//     // Match single time in HH:MM or H[H]AM/PM format
-//     const timePattern = /(\d{1,2})(?::(\d{2}))?\s*(AM|PM|am|pm)?/;
-//     const timeMatch = input.match(timePattern);
-//     if (timeMatch) {
-//       console.log('DEBUG: Matched single time:', timeMatch);
-//       let hour = parseInt(timeMatch[1], 10);
-//       let minute = timeMatch[2] ? parseInt(timeMatch[2], 10) : 0;
-//       const ampm = timeMatch[3]?.toLowerCase();
-//       if (ampm === 'pm' && hour < 12) hour += 12;
-//       if (ampm === 'am' && hour === 12) hour = 0;
-//       start_time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-//       const endHour = (hour + 1) % 24;
-//       end_time = `${endHour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-//     }
-//     // Only use time blocks if no explicit range is found
-//     if (!timeRangeMatch) {
-//       if (/morning/i.test(input)) {
-//         console.log('DEBUG: Using time block morning');
-//         start_time = '09:00';
-//         end_time = '12:00';
-//       } else if (/afternoon/i.test(input)) {
-//         console.log('DEBUG: Using time block afternoon');
-//         start_time = '13:00';
-//         end_time = '17:00';
-//       } else if (/evening/i.test(input)) {
-//         console.log('DEBUG: Using time block evening');
-//         start_time = '17:00';
-//         end_time = '20:00';
-//       } else if (/night/i.test(input)) {
-//         console.log('DEBUG: Using time block night');
-//         start_time = '20:00';
-//         end_time = '22:00';
-//       }
-//     }
-//   }
-
-//   if (date) {
-//     console.log('DEBUG: Returning parsed date/time:', { date, start_time, end_time });
-//     return { date, start_time, end_time };
-//   }
-//   return null;
-// }
 
 function advancedHeuristicTimeSlot(input: string, context: any): any | null {
   if (!context || !context.scheduledDate) return null;
@@ -241,57 +136,9 @@ function advancedHeuristicTimeSlot(input: string, context: any): any | null {
   return null;
 }
 
-// async function parseTimeSlotWithHuggingFace(input: string, veryWellFormedContext = false, context: any = {}): Promise<any | null> {
-//   if (!HF_API_KEY) return null;
-//   try {
-//     let contextInput = addContextIfAmbiguous(input);
-//     if (veryWellFormedContext) {
-//       contextInput = addVeryWellFormedContext(input, context);
-//     }
-//     const response = await axios.post(
-//       'https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1',
-//       { inputs: contextInput },
-//       { headers: { Authorization: `Bearer ${HF_API_KEY}` } }
-//     );
-//     console.log('DEBUG: Hugging Face response:', response.data);
-//     if (typeof response.data === 'string') {
-//       try {
-//         return safeParseTimeSlot(response.data);
-//       } catch {}
-//     }
-//     if (response.data && typeof response.data[0]?.generated_text === 'string') {
-//       return safeParseTimeSlot(response.data[0].generated_text);
-//     }
-//     const entities = response.data[0]?.entities || response.data;
-//     const dateEntity = entities.find((e: any) => e.entity_group === 'DATE');
-//     if (dateEntity) {
-//       const dateStr = dateEntity.word;
-//       const parsedDate = Date.parse(dateStr);
-//       if (!isNaN(parsedDate)) {
-//         const date = new Date(parsedDate);
-//         const pad = (n: number) => n.toString().padStart(2, '0');
-//         const formattedDate = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-//         const start_time = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
-//         const end = new Date(date.getTime() + 60 * 60 * 1000);
-//         const end_time = `${pad(end.getHours())}:${pad(end.getMinutes())}`;
-//         return {
-//           date: formattedDate,
-//           start_time,
-//           end_time
-//         };
-//       }
-//     }
-//     return null;
-//   } catch (err) {
-//     console.error('Hugging Face API error:', err);
-//     return null;
-//   }
-// }
 
-// Enhanced NLP parser using Ollama for intelligent date/time extraction
 const axios = require('axios');
 
-// Helper to parse JSON response safely
 function safeParseTimeSlot(json: string): any | null {
   try {
     const obj = JSON.parse(json);
@@ -308,7 +155,6 @@ function safeParseTimeSlot(json: string): any | null {
   }
 }
 
-// Enhanced parseTimeSlot function using Ollama for intelligent NLP
 export async function parseTimeSlot(input: string, context?: any): Promise<any> {
   console.log('Enhanced NLP parsing input:', input);
   
